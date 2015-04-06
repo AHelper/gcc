@@ -498,6 +498,10 @@ tilepro*-*-*)
 	cpu_type=tilepro
 	need_64bit_hwint=yes
 	;;
+z80-*-*)
+        target_has_targetm_common=no
+        cpu_type=z80
+        ;;
 esac
 
 tm_file=${cpu_type}/${cpu_type}.h
@@ -2855,6 +2859,12 @@ xtensa*-*-linux*)
 	tm_file="${tm_file} dbxelf.h elfos.h gnu-user.h linux.h glibc-stdint.h xtensa/linux.h"
 	tmake_file="${tmake_file} xtensa/t-xtensa"
 	;;
+z80-*-none)
+        gas=yes
+        gnu_ld=yes
+        tm_file="dbxelf.h elfos.h newlib-stdint.h ${tm_file}"
+        tmake_file="${tmake_file} z80/t-z80"
+        ;;
 am33_2.0-*-linux*)
 	tm_file="mn10300/mn10300.h dbxelf.h elfos.h gnu-user.h linux.h glibc-stdint.h mn10300/linux.h"
 	gas=yes gnu_ld=yes

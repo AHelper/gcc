@@ -539,6 +539,7 @@ proc check_profiling_available { test_what } {
 	     || [istarget tic6x-*-elf]
 	     || [istarget xstormy16-*]
 	     || [istarget xtensa*-*-elf]
+	     || [istarget z80-*-*]
 	     || [istarget *-*-rtems*]
 	     || [istarget *-*-vxworks*] } {
 	    set profiling_available_saved 0
