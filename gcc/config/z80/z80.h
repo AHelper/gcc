@@ -296,9 +296,9 @@ enum reg_class
 
 /* A C compound statement to output to stdio stream STREAM the
    assembler syntax for an instruction operand X.  */
-#define PRINT_OPERAND(STREAM, X, CODE) moxie_print_operand (STREAM, X, CODE)
+#define PRINT_OPERAND(STREAM, X, CODE) z80_print_operand (STREAM, X, CODE)
 
-#define PRINT_OPERAND_ADDRESS(STREAM ,X) moxie_print_operand_address (STREAM, X)
+#define PRINT_OPERAND_ADDRESS(STREAM ,X) z80_print_operand_address (STREAM, X)
 
 /* Output and Generation of Labels */
 
@@ -480,7 +480,7 @@ enum reg_class
    defined.  */
 #define INITIAL_ELIMINATION_OFFSET(FROM, TO, OFFSET)			\
   do {									\
-    (OFFSET) = moxie_initial_elimination_offset ((FROM), (TO));		\
+    (OFFSET) = z80_initial_elimination_offset ((FROM), (TO));		\
   } while (0)
 
 /* A C expression that is nonzero if REGNO is the number of a hard

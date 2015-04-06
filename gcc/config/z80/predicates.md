@@ -24,7 +24,7 @@
 
 ;; Nonzero if OP can be source of a simple move operation.
 
-(define_predicate "moxie_general_movsrc_operand"
+(define_predicate "z80_general_movsrc_operand"
   (match_code "mem,const_int,reg,subreg,symbol_ref,label_ref,const")
 {
   /* Any (MEM LABEL_REF) is OK.  That is a pc-relative load.  */
@@ -60,14 +60,14 @@
 })
 ;; Nonzero if OP can be an operand to an add/inc/dec instruction.
 
-(define_predicate "moxie_add_operand"
+(define_predicate "z80_add_operand"
   (ior (match_code "reg")
        (and (match_code "const_int")
 	    (match_test "IN_RANGE (INTVAL (op), -255, 255)"))))
 
 ;; Nonzero if OP can be an operand to an sub/dec instruction.
 
-(define_predicate "moxie_sub_operand"
+(define_predicate "z80_sub_operand"
   (ior (match_code "reg")
        (and (match_code "const_int")
 	    (match_test "IN_RANGE (INTVAL (op), 0, 255)"))))

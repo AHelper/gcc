@@ -53,14 +53,14 @@
 #define LOSE_AND_RETURN(msgid, x)		\
   do						\
     {						\
-      moxie_operand_lossage (msgid, x);		\
+      z80_operand_lossage (msgid, x);		\
       return;					\
     } while (0)
 
 /* Worker function for TARGET_RETURN_IN_MEMORY.  */
 
 static bool
-moxie_return_in_memory (const_tree type, const_tree fntype ATTRIBUTE_UNUSED)
+z80_return_in_memory (const_tree type, const_tree fntype ATTRIBUTE_UNUSED)
 {
   const HOST_WIDE_INT size = int_size_in_bytes (type);
   return (size == -1 || size > 2 * UNITS_PER_WORD);
@@ -74,7 +74,7 @@ moxie_return_in_memory (const_tree type, const_tree fntype ATTRIBUTE_UNUSED)
    We always return values in register $r0 for moxie.  */
 
 static rtx
-moxie_function_value (const_tree valtype, 
+z80_function_value (const_tree valtype, 
 		      const_tree fntype_or_decl ATTRIBUTE_UNUSED,
 		      bool outgoing ATTRIBUTE_UNUSED)
 {
@@ -86,7 +86,7 @@ moxie_function_value (const_tree valtype,
    We always return values in register $r0 for moxie.  */
 
 static rtx
-moxie_libcall_value (enum machine_mode mode,
+z80_libcall_value (enum machine_mode mode,
                      const_rtx fun ATTRIBUTE_UNUSED)
 {
   return gen_rtx_REG (mode, Z80_H);
@@ -97,7 +97,7 @@ moxie_libcall_value (enum machine_mode mode,
    We always return values in register $r0 for moxie.  */
 
 static bool
-moxie_function_value_regno_p (const unsigned int regno)
+z80_function_value_regno_p (const unsigned int regno)
 {
   return (regno == Z80_D);
 }
@@ -108,7 +108,7 @@ moxie_function_value_regno_p (const unsigned int regno)
    categorization of the error.  */
 
 static void
-moxie_operand_lossage (const char *msgid, rtx op)
+z80_operand_lossage (const char *msgid, rtx op)
 {
   debug_rtx (op);
   output_operand_lossage ("%s", msgid);
@@ -117,7 +117,7 @@ moxie_operand_lossage (const char *msgid, rtx op)
 /* The PRINT_OPERAND_ADDRESS worker.  */
 
 void
-moxie_print_operand_address (FILE *file, rtx x)
+z80_print_operand_address (FILE *file, rtx x)
 {
   switch (GET_CODE (x))
     {
@@ -164,7 +164,7 @@ moxie_print_operand_address (FILE *file, rtx x)
 /* The PRINT_OPERAND worker.  */
 
 void
-moxie_print_operand (FILE *file, rtx x, int code)
+z80_print_operand (FILE *file, rtx x, int code)
 {
   rtx operand = x;
 
@@ -227,7 +227,7 @@ struct GTY(()) machine_function
 /* Zero initialization is OK for all current fields.  */
 
 static struct machine_function *
-moxie_init_machine_status (void)
+z80_init_machine_status (void)
 {
   return ggc_alloc_cleared_machine_function ();
 }
@@ -236,17 +236,17 @@ moxie_init_machine_status (void)
 /* The TARGET_OPTION_OVERRIDE worker.
    All this curently does is set init_machine_status.  */
 static void
-moxie_option_override (void)
+z80_option_override (void)
 {
   /* Set the per-function-data initializer.  */
-  init_machine_status = moxie_init_machine_status;
+  init_machine_status = z80_init_machine_status;
 }
 
 /* Compute the size of the local area and the size to be adjusted by the
  * prologue and epilogue.  */
 
 static void
-moxie_compute_frame (void)
+z80_compute_frame (void)
 {
   /* For aligning the local variables.  */
   int stack_alignment = STACK_BOUNDARY / BITS_PER_UNIT;
@@ -277,13 +277,13 @@ moxie_compute_frame (void)
 }
 
 void
-moxie_expand_prologue (void)
+z80_expand_prologue (void)
 {
   printf("z80 prologue\n");
 }
 
 void
-moxie_expand_epilogue (void)
+z80_expand_epilogue (void)
 {
   printf("z80 Epilogue\n");
   emit_insn(gen_returner());
@@ -292,14 +292,14 @@ moxie_expand_epilogue (void)
 /* Implements the macro INITIAL_ELIMINATION_OFFSET, return the OFFSET.  */
 
 int
-moxie_initial_elimination_offset (int from, int to)
+z80_initial_elimination_offset (int from, int to)
 {
   int ret;
   
   if ((from) == FRAME_POINTER_REGNUM && (to) == HARD_FRAME_POINTER_REGNUM)
     {
       /* Compute this since we need to use cfun->machine->local_vars_size.  */
-      moxie_compute_frame ();
+      z80_compute_frame ();
       ret = -cfun->machine->callee_saved_reg_size;
     }
   else if ((from) == ARG_POINTER_REGNUM && (to) == HARD_FRAME_POINTER_REGNUM)
@@ -313,7 +313,7 @@ moxie_initial_elimination_offset (int from, int to)
 /* Worker function for TARGET_SETUP_INCOMING_VARARGS.  */
 
 static void
-moxie_setup_incoming_varargs (cumulative_args_t cum_v,
+z80_setup_incoming_varargs (cumulative_args_t cum_v,
 			      enum machine_mode mode ATTRIBUTE_UNUSED,
 			      tree type ATTRIBUTE_UNUSED,
 			      int *pretend_size, int no_rtl)
@@ -342,7 +342,7 @@ moxie_setup_incoming_varargs (cumulative_args_t cum_v,
 /* Return the fixed registers used for condition codes.  */
 
 static bool
-moxie_fixed_condition_code_regs (unsigned int *p1, unsigned int *p2)
+z80_fixed_condition_code_regs (unsigned int *p1, unsigned int *p2)
 {
 
   return true;
@@ -356,7 +356,7 @@ moxie_fixed_condition_code_regs (unsigned int *p1, unsigned int *p2)
    NULL_RTX if there's no more space.  */
 
 static rtx
-moxie_function_arg (cumulative_args_t cum_v, enum machine_mode mode,
+z80_function_arg (cumulative_args_t cum_v, enum machine_mode mode,
 		    const_tree type,
 		    bool named ATTRIBUTE_UNUSED)
 {
@@ -375,7 +375,7 @@ moxie_function_arg (cumulative_args_t cum_v, enum machine_mode mode,
 }
 
 static void
-moxie_function_arg_advance (cumulative_args_t cum_v, enum machine_mode mode,
+z80_function_arg_advance (cumulative_args_t cum_v, enum machine_mode mode,
 			    const_tree type, bool named ATTRIBUTE_UNUSED)
 {
   CUMULATIVE_ARGS *cum = get_cumulative_args (cum_v);
@@ -394,7 +394,7 @@ moxie_function_arg_advance (cumulative_args_t cum_v, enum machine_mode mode,
    passed by reference.  */
 
 static bool
-moxie_pass_by_reference (cumulative_args_t cum ATTRIBUTE_UNUSED,
+z80_pass_by_reference (cumulative_args_t cum ATTRIBUTE_UNUSED,
 			 enum machine_mode mode, const_tree type,
 			 bool named ATTRIBUTE_UNUSED)
 {
@@ -417,7 +417,7 @@ moxie_pass_by_reference (cumulative_args_t cum ATTRIBUTE_UNUSED,
    that fit in argument passing registers.  */
 
 static int
-moxie_arg_partial_bytes (cumulative_args_t cum_v,
+z80_arg_partial_bytes (cumulative_args_t cum_v,
 			 enum machine_mode mode,
 			 tree type, bool named)
 {
@@ -427,7 +427,7 @@ moxie_arg_partial_bytes (cumulative_args_t cum_v,
   if (*cum >= 8)
     return 0;
 
-  if (moxie_pass_by_reference (cum_v, mode, type, named))
+  if (z80_pass_by_reference (cum_v, mode, type, named))
     size = 4;
   else if (type)
     {
@@ -449,7 +449,7 @@ moxie_arg_partial_bytes (cumulative_args_t cum_v,
 /* Worker function for TARGET_STATIC_CHAIN.  */
 
 static rtx
-moxie_static_chain (const_tree fndecl, bool incoming_p)
+z80_static_chain (const_tree fndecl, bool incoming_p)
 {
   rtx addr, mem;
 
@@ -470,7 +470,7 @@ moxie_static_chain (const_tree fndecl, bool incoming_p)
 /* Worker function for TARGET_ASM_TRAMPOLINE_TEMPLATE.  */
 
 static void
-moxie_asm_trampoline_template (FILE *f)
+z80_asm_trampoline_template (FILE *f)
 {
   fprintf (f, "\tpush  $sp, $r0\n");
   fprintf (f, "\tldi.l $r0, 0x0\n");
@@ -483,7 +483,7 @@ moxie_asm_trampoline_template (FILE *f)
 /* Worker function for TARGET_TRAMPOLINE_INIT.  */
 
 static void
-moxie_trampoline_init (rtx m_tramp, tree fndecl, rtx chain_value)
+z80_trampoline_init (rtx m_tramp, tree fndecl, rtx chain_value)
 {
   rtx mem, fnaddr = XEXP (DECL_RTL (fndecl), 0);
 
@@ -504,47 +504,47 @@ moxie_trampoline_init (rtx m_tramp, tree fndecl, rtx chain_value)
 #define TARGET_PROMOTE_PROTOTYPES	hook_bool_const_tree_true
 
 #undef  TARGET_RETURN_IN_MEMORY
-#define TARGET_RETURN_IN_MEMORY		moxie_return_in_memory
+#define TARGET_RETURN_IN_MEMORY		z80_return_in_memory
 #undef  TARGET_MUST_PASS_IN_STACK
 #define TARGET_MUST_PASS_IN_STACK	must_pass_in_stack_var_size
 #undef  TARGET_PASS_BY_REFERENCE
-#define TARGET_PASS_BY_REFERENCE        moxie_pass_by_reference
+#define TARGET_PASS_BY_REFERENCE        z80_pass_by_reference
 #undef  TARGET_ARG_PARTIAL_BYTES
-#define TARGET_ARG_PARTIAL_BYTES        moxie_arg_partial_bytes
+#define TARGET_ARG_PARTIAL_BYTES        z80_arg_partial_bytes
 #undef  TARGET_FUNCTION_ARG
-#define TARGET_FUNCTION_ARG		moxie_function_arg
+#define TARGET_FUNCTION_ARG		z80_function_arg
 #undef  TARGET_FUNCTION_ARG_ADVANCE
-#define TARGET_FUNCTION_ARG_ADVANCE	moxie_function_arg_advance
+#define TARGET_FUNCTION_ARG_ADVANCE	z80_function_arg_advance
 
 
 #undef  TARGET_SETUP_INCOMING_VARARGS
-#define TARGET_SETUP_INCOMING_VARARGS 	moxie_setup_incoming_varargs
+#define TARGET_SETUP_INCOMING_VARARGS 	z80_setup_incoming_varargs
 
 #undef	TARGET_FIXED_CONDITION_CODE_REGS
-#define	TARGET_FIXED_CONDITION_CODE_REGS moxie_fixed_condition_code_regs
+#define	TARGET_FIXED_CONDITION_CODE_REGS z80_fixed_condition_code_regs
 
 /* Define this to return an RTX representing the place where a
    function returns or receives a value of data type RET_TYPE, a tree
    node node representing a data type.  */
 #undef TARGET_FUNCTION_VALUE
-#define TARGET_FUNCTION_VALUE moxie_function_value
+#define TARGET_FUNCTION_VALUE z80_function_value
 #undef TARGET_LIBCALL_VALUE
-#define TARGET_LIBCALL_VALUE moxie_libcall_value
+#define TARGET_LIBCALL_VALUE z80_libcall_value
 #undef TARGET_FUNCTION_VALUE_REGNO_P
-#define TARGET_FUNCTION_VALUE_REGNO_P moxie_function_value_regno_p
+#define TARGET_FUNCTION_VALUE_REGNO_P z80_function_value_regno_p
 
 #undef TARGET_FRAME_POINTER_REQUIRED
 #define TARGET_FRAME_POINTER_REQUIRED hook_bool_void_true
 
 #undef TARGET_STATIC_CHAIN
-#define TARGET_STATIC_CHAIN moxie_static_chain
+#define TARGET_STATIC_CHAIN z80_static_chain
 #undef TARGET_ASM_TRAMPOLINE_TEMPLATE
-#define TARGET_ASM_TRAMPOLINE_TEMPLATE moxie_asm_trampoline_template
+#define TARGET_ASM_TRAMPOLINE_TEMPLATE z80_asm_trampoline_template
 #undef TARGET_TRAMPOLINE_INIT
-#define TARGET_TRAMPOLINE_INIT moxie_trampoline_init
+#define TARGET_TRAMPOLINE_INIT z80_trampoline_init
 
 #undef TARGET_OPTION_OVERRIDE
-#define TARGET_OPTION_OVERRIDE moxie_option_override
+#define TARGET_OPTION_OVERRIDE z80_option_override
 
 struct gcc_target targetm = TARGET_INITIALIZER;
 
