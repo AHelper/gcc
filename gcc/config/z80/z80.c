@@ -248,6 +248,7 @@ z80_option_override (void)
 static void
 z80_compute_frame (void)
 {
+  printf("compute frame\n");
   /* For aligning the local variables.  */
   int stack_alignment = STACK_BOUNDARY / BITS_PER_UNIT;
   int padding_locals;
@@ -398,6 +399,7 @@ z80_pass_by_reference (cumulative_args_t cum ATTRIBUTE_UNUSED,
 			 enum machine_mode mode, const_tree type,
 			 bool named ATTRIBUTE_UNUSED)
 {
+  printf("byref\n");
   unsigned HOST_WIDE_INT size;
 
   if (type)
@@ -421,6 +423,7 @@ z80_arg_partial_bytes (cumulative_args_t cum_v,
 			 enum machine_mode mode,
 			 tree type, bool named)
 {
+  printf("partial\n");
   CUMULATIVE_ARGS *cum = get_cumulative_args (cum_v);
   int bytes_left, size;
 
